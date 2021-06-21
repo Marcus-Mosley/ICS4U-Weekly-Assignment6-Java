@@ -47,9 +47,10 @@ public class Main implements YahtzeeConstants {
     while (true) {
       for (count = 0; count < numPlayers; count++) {
         if (playerArray[count].playTurn()) {
-          for (int counter = 0; count < numPlayers; count++) {
-            scoreArray[count] = playerArray[count].getTotal();
+          for (int counter = 0; counter < numPlayers; counter++) {
+            scoreArray[counter] = playerArray[counter].getTotal();
           }
+          done = true;
           break;
         }
       }
@@ -65,17 +66,18 @@ public class Main implements YahtzeeConstants {
   * The checkWinner method prints the winner of the match and their score.
   */
   private static void winner(Yahtzee[] playerArray, int[] scoreArray) {
-    int max = 0;
-    int maxLoc = 0;
+    int max = -1;
+    int maxLoc = -1;
     
-    for (int counter = 1; counter < scoreArray.length; counter++) {
+    for (int counter = 0; counter < scoreArray.length; counter++) {
       if (scoreArray[counter] > max) {
         max = scoreArray[counter];
         maxLoc = counter;
       }
     }
     
-    System.out.println("\n" + playerArray[maxLoc].name + " has won, with a total of " + max + " !");
+    System.out.println("\n" + playerArray[maxLoc].name + " has won, with a total of " + max
+        + " points!");
     System.out.println("\nDone!");
   }
 }

@@ -158,24 +158,24 @@ public class Yahtzee implements YahtzeeConstants {
     } else if (category.contains("LG_STRAIGHT")) {
       scoreTable.put(category, LG_STRAIGHT);
     } else if (category.contains("YAHTZEE")) {
-      if (scoreTable.get(category) == -1) {
-        scoreTable.put(category, YAHTZEE);
-      } else {
-        if (scoreTable.get(category) != 0) {
+      if (scoreTable.get("YAHTZEE") != -1) {
+        System.out.print(scoreTable.get("YAHTZEE"));
+        if (scoreTable.get("YAHTZEE") != 0) {
           scoreTable.put("BONUS", scoreTable.get("BONUS") + YAHTZEE_BONUS);
         }
         
         Scanner input = new Scanner(System.in);
         while (true) {
           System.out.print("You can now select a new category to place your extra points!");
-          System.out.print("Please input 'Upper' for anything in the Upper Section, Yahtzee"
+          System.out.print("\nPlease input 'Upper' for anything in the Upper Section, Yahtzee"
               + " is not valid! ");
           category = input.nextLine();
           category = category.toUpperCase();
     
-          if (category == "UPPER" || category == "THREE_OF_A_KIND" || category == "FOUR_OF_A_KIND"
-              || category == "FULL_HOUSE" || category == "SM_STRAIGHT" || category == "LG_STRAIGHT"
-              || category == "CHANCE") {
+          if (category.contains("UPPER") || category.contains("THREE_OF_A_KIND") 
+              || category.contains("FOUR_OF_A_KIND") || category.contains("FULL_HOUSE") 
+              || category.contains("SM_STRAIGHT") || category.contains("LG_STRAIGHT")
+              || category.contains("CHANCE")) {
             if (scoreTable.containsKey(category)) {
               if (scoreTable.get(category) == -1) {
                 System.out.println("\nThat category has already been used!");
@@ -188,8 +188,10 @@ public class Yahtzee implements YahtzeeConstants {
             }
           }
         }
+        addPoints();
+      } else {
+        scoreTable.put(category, YAHTZEE);
       }
-      addPoints();
     } else if (category.contains("CHANCE")) {
       scoreTable.put(category, totalDice());
     }
@@ -199,6 +201,11 @@ public class Yahtzee implements YahtzeeConstants {
   * The checkCategory method ensures that the user has the correct roll for a given category.
   */
   private boolean checkCategory() {
+    
+    
+    for (int count = 0; count < diceList.length; count++) {
+      diceList[count] = 0;
+    }
     
     for (int count = 0; count < N_DICE; count++) {
       if (dice[count] == 1) {
@@ -251,12 +258,10 @@ public class Yahtzee implements YahtzeeConstants {
         return true;
       }
     } else if (category.contains("FULL_HOUSE")) {
-      if (diceList[0] == 3 || diceList[1] == 3 || diceList[2] == 3 || diceList[3] == 3 
-          || diceList[4] == 3 || diceList[5] == 3) {
-        if (diceList[0] == 2 || diceList[1] == 2 || diceList[2] == 2 || diceList[3] == 2 
-            || diceList[4] == 2 || diceList[5] == 2) {
-          return true;
-        }
+      if ((diceList[0] == 3 || diceList[1] == 3 || diceList[2] == 3 || diceList[3] == 3 
+          || diceList[4] == 3 || diceList[5] == 3) && (diceList[0] == 2 || diceList[1] == 2 
+          || diceList[2] == 2 || diceList[3] == 2 || diceList[4] == 2 || diceList[5] == 2)) {
+        return true;
       }
     } else if (category.contains("SM_STRAIGHT")) {
       if ((diceList[0] >= 1 && diceList[1] >= 1 && diceList[2] >= 1 && diceList[3] >= 1)
@@ -268,7 +273,7 @@ public class Yahtzee implements YahtzeeConstants {
       if ((diceList[0] == 1 && diceList[1] == 1 && diceList[2] == 1 && diceList[3] == 1 
           && diceList[4] == 1)
           || (diceList[1] == 1 && diceList[2] == 1 && diceList[3] == 1 && diceList[4] == 1 
-              && diceList[5] == 1)) {
+          && diceList[5] == 1)) {
         return true;
       }
     } else if (category.contains("YAHTZEE")) {
@@ -296,7 +301,7 @@ public class Yahtzee implements YahtzeeConstants {
       category = category.toUpperCase();
       
       if (scoreTable.containsKey(category)) {
-        if (scoreTable.get(category) != -1 && category != "YAHTZEE") {
+        if (scoreTable.get(category) != -1 && category.contains("YAHTZEE") == false) {
           System.out.println("\nThat category has already been used!");
           continue;
         } else {
@@ -308,10 +313,11 @@ public class Yahtzee implements YahtzeeConstants {
               System.out.print("\nYour hand does not award any points in this"
                   + " category, continue (Y/N)? ");
               String choice = input.nextLine();
-              if (choice.toUpperCase() == "Y") {
+              choice = choice.toUpperCase();
+              if (choice.contains("Y")) {
                 scoreTable.put(category, 0);
                 return;
-              } else if (choice.toUpperCase() == "N") {
+              } else if (choice.contains("N")) {
                 break;
               } else {
                 System.out.println("\nPlease input Y or N! ");
@@ -409,8 +415,8 @@ public class Yahtzee implements YahtzeeConstants {
     
     for (String key : keys) {
       if (scoreTable.get(key) != -1) {
-        if (key == "ONES" || key == "TWOS" || key == "THREES" || key == "FOURS"
-            || key == "FIVES" || key == "SIXES") {
+        if (key.contains("ONES") || key.contains("TWOS") || key.contains("THREES") 
+            || key.contains("FOURS") || key.contains("FIVES") || key.contains("SIXES")) {
           upperTotal += scoreTable.get(key);
         }
         total += scoreTable.get(key);
